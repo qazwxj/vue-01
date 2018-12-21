@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src='./lib/vue-2.4.0.js'></script>
+    <link rel="stylesheet" href="./lib/bootstrap-3.3.7.css">
+</head>
+<body>
+    <div id="app">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">添加品牌</h3>
+            </div>
+            <div class="panel-body form-inline">
+                <label>
+                    Id:
+                    <input type="text" class="form-control" v-model="id">
+                </label>
+                <label >
+                    Name:
+                    <input type="text"  class="form-control" v-model="name">
+                </label>
+                <input type="button" value="添加" class="btn btn-primary"   @click="add">
+                <label >
+                        搜素关键字:
+                        <input type="text"  class="form-control" v-model="keywords">
+                 </label>
+            </div>
+        </div>
+            <table class="table table-bodered table-hover table-striped"> 
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Ctime</th>
+                        <th>Operation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in search(keywords)" :key='item.id'>
+                        <td>{{item.id}}</td>
+                        <td>{{item.name}}</td>
+                        <td> {{item.ctime }}</td>
+                        <td>
+                            <a href="" @click.prevent="del(item.id)">删除</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+    </div>
+    <script>
+        var vm =new Vue({
+            el:"#app",
+            data:{
+                id:'',
+                name:'',
+                keywords:'',
+                list:[
+                    {id:1,name:'奔驰',ctime:new Date()},
+                    {id:2,name:"宝马",ctime:new Date()}
+                ]
+            },
+            methods:{
+                add(){
+                    // console.log('ok')
+                    // 分析：1.获取到id和name直接从data上面获取
+                    // 2.组织出一个对象
+                    // 3.把这个对象调用相关方法添加到data上的list中
+                    // 4.注意在vue中已经实现了数据的双向绑定，
+                    // 每当我们修改了data中的数据vue会默认监听到数据的修改，
+                    // 自动把最新的数据应用到页面上
+                    // 5.当我们意识到上面的第四步的时候，就证明大家已经入门vue了我们更多在进行vm 中model数据的操作，
+                    // 同时，在操作model数据的时候，指定的业务逻辑操作
+                    var car={id:this.id , name:this.name, ctime:new Date()}
+                    this.list.push(car)
+                    this.id=this.name=""
+                   },
+                 del(id){
+                        this.list.some((item,i)=>{
+                         if(item.id==id){
+                             this.list.splice(i,1)
+                             return true
+                         }
+                     })
+                 },
+                 search(keywords){
+                     var newArr=[]
+                     this.list.forEach((item)=>{
+                         if(item.name.indexOf(keywords)!=-1){
+                             newArr.push(item)
+                         }
+                     })
+                     return newArr
+                 }
+            }
+     })
+    
+    </script>
+</body>
+</html>

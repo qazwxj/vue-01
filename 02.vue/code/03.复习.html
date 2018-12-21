@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- vue就是一个js文件 -->
+    <script src="./lib/vue-2.4.0.js"></script>
+</head>
+<body>
+    <!-- 在页面中准备一个vue的控制区域 -->
+        <div id="app">
+            <!-- 利用插值表达式将数据渲染到页面 -->
+            <h3>{{msg}}</h3>
+            <!-- 利用v-text将数据渲染到页面上 -->
+            <h3 v-text="msg"></h3>
+            <!-- 利用v-html将数据渲染到页面上 -->
+            <h3 v-html="msg"></h3>
+            <!-- v-text是直接将其解析成纯文本，
+                v-html还会将html标签解析出来 -->
+             
+   <!-- v-cloak可以解决插值表达式的闪烁问题 v-cloak v-cloak -->
+   <!-- v-bind是做属性绑定的指令通常情况下简写成 “:”,
+    如果要绑定就必须在data中定义好，否则会报错 -->
+    <!-- v-on做事件绑定的指令，简写是@符号  在绑定事件的时候必须先在methods中定义了-->
+                <!-- <input type="button" v-bind:title="her"> -->
+                <input type="button" value="按钮" v-on:click="add">
+    <!-- v-model是一个唯一实现双向数据绑定的指令，并且只能用于表单元素，不需要指定属性，只能绑定value属性
+    v-model是唯一一个实现双向数据绑定的指令，并且只能用于表单元素，不需要指定属性，只能绑定value属性 -->
+<!-- v-model和v-text是一样的都要必须事先在data中定义好了
+事件修饰符在事件绑定时，加在事件名后面
+
+常见的有1.stop阻止冒泡
+2.prevent阻止浏览器默认行为
+3.capture使用捕获
+4.self只有点击当前元素自身才会触发事件，如果通过冒泡或是捕获传递过来的事件不会触发
+5.once 只触发一次
+6.passive在移动使用scroll事件时建议加上可以提高性能 -->
+
+    <input type="text" v-model="msg">
+
+        </div>
+
+        <script>
+            // 创建vue实例
+            var vm =new Vue({
+                el:"#app",
+                data:{
+                    msg:"今天天气不好",
+                    her:"时间就是金钱"
+                },
+                methods:{
+                    add(){
+                        console.log("想睡觉")
+                    }
+                }
+
+            })
+        
+        </script>
+
+<!-- 闭包：函数内部包含一个函数，在内部函数中访问了外部函数中的局部成员 -->
+
+<!-- 设置类样式
+设置一个数组
+<h2 :class=["red","thin"]></h2>
+设置一个对象
+<h3 :class="red:true ,thin:false,active:true"></h3>
+设置一个对象比较常用
+<h2 style:"styleobj1"></h2>
+设置一个数组(数组中放多个样式对象，可以合并)
+<h3 :style={'styleobj1','styleobj2'}></h3> -->
+
+<!-- v-for列表渲染
+    <input type="text"> -->
+
+</body>
+</html>
