@@ -21,14 +21,14 @@
                 </label>
                 <label>
                         Name:
-                        <input type="text" class="form-control" v-model="name">
+                        <input type="text" class="form-control" v-model="name" @keyup.f2="add">
                 </label>
                 <label>
                         <input type="button"  value="添加" class="btn btn-primary" @click="add()">
                 </label>
                 <label >
                     搜索名称关键字：
-                     <input type="text" class='form-control' v-model="keywords">
+                     <input type="text" class='form-control' v-model="keywords" v-focus >
                 </label>
              </div>
          </div>
@@ -45,7 +45,7 @@
                 <tr v-for='item in search(keywords)' :key="item.id">
                     <td>{{item.id}}</td>
                     <td>{{item.name}}</td>
-                    <td>{{item.ctime}}</td>
+                    <td>{{item.ctime|dateFormat()}}</td>
                     <td>
                         <a href="" @click.prevent="del(item.id)">删除</a>
                     </td>
@@ -54,21 +54,20 @@
          </table>
     </div>
     <div id="app2">
-        <!-- <h3 v-color="pink" v-fontweight="900"
-         v-fontsize="50">{{dt|dateFormat}}</h3> -->
-         <h3>{{dt|dateFormat}}</h3>
+        <p>{{dt|dateFormat}}</p>
     </div>
     <script>
-        //全局的过滤器，进行时间的格式化
-        //所谓的全局过滤器，就是所有的vm实例都共享的
-        Vue.filter('dateFormat',function(dateSter,pattern=""){
+        // //全局的过滤器，进行时间的格式化
+        // //所谓的全局过滤器，就是所有的vm实例都共享的
+        Vue.filter('dateFormat',function(dateStr,pattern=""){
+
             //根据给定的时间字符串，得到特定的时间
             var dt=new Date(dateStr)
             
             var y=dt.getFullYear()
             var m=dt.getMonth()+1
             var d=dt.getDate()
-            if(pattern.toLowerCase()==='yyy-mm-dd'){
+            if(pattern.toLowerCase()==='yyyy-mm-dd'){
                 return `${y}-${m}-${d}`
             }else{
                 var hh=dt.getHours()
@@ -77,8 +76,34 @@
                 return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
             }
         })
+        //自定义全局按键修饰符
+          Vue.config.keyCodes.f2=113
+        //使用Vue.directive()定义全局的指令 v-focus
+        //  // 使用参数1，指令的名称注意在定义的时候，指令的名称前面，不需要加v-前缀
+        //  但是在调用的时候，必须在指令名称前面加v-前缀进行调用
+        //  参数2：是一个对象，这个对象身山，有一些指令相关的函数，这些函数可以特定的阶段，执行相关的操作
+            Vue.directive('focus',{
+                bind:function(el){
+                    // 每当指令绑定到元素上的时候，会立即执行这个bind函数，执行一次
+                    // 注意在每一个函数中，第一个参数永远是el表示被绑定了指令的那个元素，这个el参数，是一个原生的js对象
+                    // 在元素刚绑定了指令的时候，还没有插入到dom中去，这时候，调用focus方法没有作用
+                    // 因为，一个元素只能插入dom之后，才能获取焦点
+                    // el.focus()
+
+                },
+                inserted:function(el){//
+                // inserted表示元素，插入到dom中的时候，会执行inserted函数触发1次
+                    el.focus(el)
+                },
+                updated:function(el){
+                    // 当Vnode更新的时候，会执行updated可能会触发多次
+                }
+
+            })
 
 
+           //创建vue2的实例
+   
         //创建vue实例得到viewModel
         var vm=new Vue({
             el:'#app',
@@ -172,7 +197,7 @@
                     // })
                     // console.log(index)
                     // this.list.splice(index,1)
-                },
+             },
             
 
                 search(keywords){
@@ -198,25 +223,38 @@
                     // return this.list.filter(item=>item.name.includes(this.keywords.trim()))
                 }
             }
-        })
-
-        //如何自定义一个私有的过滤器(局部)
-        var vm2=new Vue({
+           
+        
+      })
+        
+        //如何自定义个私有的过滤器(局部)
+         var vm2=new Vue({
             el:"#app2",
             data:{
                 dt:new Date()
             },
             methods:{},
-            methods:{},
-            filters:{
-                dateFormat:function(dateSter,patteern=""){
-                var dt=new Date(dateSter)
-               }
-            }
-         
-          
-        })
+            filters:{//定义私有过滤器,有两个条件[过滤器名称和处理函数]
+            //过滤器调用的时候，采用就近原则，如果私有过滤器和全局过滤器名称一致了，这时候有先调用私有过滤器
+                dateFormat:function(dateStr,pattern=""){
+                      //根据给定的时间字符串，得到特定的时间
+                    var dt=new Date(dateStr)
+                    
+                    var y=dt.getFullYear()
+                    var m=dt.getMonth()+1
+                    var d=dt.getDate()
+                    if(pattern.toLowerCase()==='yyyy-mm-dd'){
+                        return `${y}-${m}-${d}`
+                    }else{
+                        var hh=dt.getHours()
+                        var mm=dt.getMinutes()
+                        var ss=dt.getSeconds()
+                        return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
+                    }
 
+                }
+            }
+         })
 
     </script>    
 </body>

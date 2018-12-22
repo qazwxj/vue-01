@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+</head>
+<body>
+    <!-- 定义一个过滤器的语法(可以多次调用,先调用第一，在调用第二个)
+    vue.filter(过滤器的名称，function(参数1){})
+    过滤器中的function第一参数已经规定死了永远是过滤器管符前面传递过来的数据，
+    vue.filter('过滤器的名称',function(data){
+        return data+123
+    })
+    过滤器调用的时的格式{{name|nameOpe}} -->
+
+  <div id="app">
+      <!-- <p>{{msg|msgForme}}</p> -->
+
+      <p>{{msg|msgForme("疯狂1","123")|tect}}</p>
+  </div>
+  <script>
+      Vue.filter('msgForme',function(msg,arg,arg2){
+        //   return msg.replaec("单纯","邪恶")
+        //   replace的方法，还可以用正则表达式
+        //   return msg.replace(/单纯/g,"邪恶")
+        return msg.replace(/单纯/g,arg+arg2)
+      })
+      Vue.filter('tect',function(msg){
+          return msg+'===='
+      })
+
+      var vm =new Vue({
+          el:"#app",
+          data:{
+              msg:"曾经，我也是一个单纯的少年，单纯的，傻傻的问，谁是这个世界上最单纯的男人"
+          },
+          methods:{}
+      })
+  
+  </script>
+</body>
+</html>
