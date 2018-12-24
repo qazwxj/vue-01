@@ -173,13 +173,11 @@
                     // console.log(index)
                     // this.list.splice(index,1)
                 },
-            
-
-                search(keywords){
+                search(){
                     //根据关键字，进行数据的搜索
                     var newList=[]
                     this.list.forEach(item=>{
-                        if(item.name.indexOf(keywords)!=-1){
+                        if(item.name.indexOf(this.keywords)!=-1){
                             newList.push(item)
                         }
                     })
