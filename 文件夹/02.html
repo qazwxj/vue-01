@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="./lib/vue-2.4.0.js"></script>
+  <!-- 导入vue-router的js文件 -->
+  <script src="./lib/vue-router-3.0.1.js"></script>
+  <style>
+      /* router-link默认会有切换时的类样式，
+    当前显示的路由，默认加上的类名为router-link-active */
+  .router-link-active,
+  .myactive{
+    color:purple;
+    font-size:18px;
+    background-color:pink;
+    text-decoration:underline;
+  }
+  </style>
+ 
+</head>
+
+<body>
+  <div id="app">
+    <!-- <a href="#/login">登录</a>
+    <a href="#/register">注册</a> -->
+
+<!-- vue-router也提供了一个组件来帮助我们渲染a标签 router-link-->
+<!-- 如果你不希望router-link渲染成一个a 标签，
+  还是可以通过属性tag属性指定你希望渲染的标签元素 -->
+    <router-link to='/login' tag="span">登录</router-link>
+    <router-link to='/register'>注册</router-link>
+    <!-- 占位组件 -->
+    <router-view></router-view>
+  </div>
+  <script>
+    //创建组件的模板对象
+    var login={
+      template:'<h3>登录组件</h3>'
+    }
+
+   var register={
+     template:'<h3>注册组件</h3>'
+   }
+
+  //创建路由对象，配置路由的匹配规则
+  let router =new VueRouter({
+    //匹配规则
+    routes:[
+      // redirect作用 redirect设置重定向
+      // 用于设置页面加载时默认显示的组件
+      // 在路由匹配规则的配置中使用path-redirect属性来配置设置重定向的组件
+      {path:'/',redirect:"login"},
+      {path:"/login",component:login},
+      {path:"/register",component:register}
+    ],
+    linkActiveClass:'myactive'
+  })
+
+    let vm = new Vue({
+      el: '#app',
+      data: {},
+      methods: {},
+      // 将router挂载到vm实例身上
+      router
+    })
+  </script>
+</body>
+
+</html>
